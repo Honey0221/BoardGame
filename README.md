@@ -26,7 +26,7 @@
 - **HTML5 / CSS3 / JavaScript**
 - **jQuery**
 - **SockJS & STOMP.js**
-- **ThyleLeaf**
+- **ThymeLeaf**
 - **SweetAlert2**
 - **Swiper.js**
 
