@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardGame.mapper.GameChatMapper">
+  <!-- 게임 채팅 메시지 저장 -->
+  <insert id="insertChat" parameterType="BoardGame.domain.GameChat" useGeneratedKeys="true" keyProperty="chatId">
+    INSERT INTO game_chat (
+      game_id,
+      sender_id,
+      sender_nickname,
+      message,
+      type,
+      sent_at
+    ) VALUES (
+      #{gameId},
+      #{senderId},
+      #{senderNickname},
+      #{message},
+      #{type},
+      #{sentAt}
+    )
+  </insert>
+
+  <!-- 특정 게임의 채팅 내역 조회 -->
+  <select id="selectByGameId" parameterType="Long" resultType="BoardGame.domain.GameChat">
+    SELECT
+      gc.chat_id,
+      gc.game_id,
+      gc.sender_id,
+      gc.sender_nickname,
+      gc.message,
+      gc.type,
+      gc.sent_at,
+      m.nickname as member_nickname,
+      m.tier as member_tier
+    FROM game_chat gc
+    JOIN member m ON gc.sender_id = m.id
+    WHERE gc.game_id = #{gameId}
+    ORDER BY gc.sent_at
+  </select>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/schema/mybatis-3-mapper.dtd">
+<mapper namespace="BoardGame.mapper.AIGameMapper">
+  <insert id="insertAIGame" parameterType="BoardGame.domain.AIGame" useGeneratedKeys="true" keyProperty="aiGameId">
+    INSERT INTO ai_game (
+      player_id,
+      status,
+      player_order,
+      player_score,
+      ai_score,
+      is_player_turn
+    ) VALUES (
+      #{playerId},
+      #{status},
+      #{playerOrder},
+      #{playerScore},
+      #{aiScore},
+      #{isPlayerTurn}
+    )
+  </insert>
+
+  <select id="selectAIGameById" resultType="BoardGame.domain.AIGame">
+    SELECT
+      ai_game_id as aiGameId,
+      player_id as playerId,
+      player_order as playerOrder,
+      status,
+      player_score as playerScore,
+      ai_score as aiScore,
+      is_player_turn as isPlayerTurn,
+      started_at as startedAt,
+      ended_at as endedAt
+    FROM ai_game
+    WHERE ai_game_id = #{aiGameId}
+  </select>
+
+  <update id="updateAIGame">
+    UPDATE ai_game
+    SET
+      player_order = #{playerOrder},
+      status = #{status},
+      player_score = #{playerScore},
+      ai_score = #{aiScore},
+      is_player_turn = #{isPlayerTurn},
+      ended_at = CASE
+        WHEN #{status} = 'FINISHED' THEN NOW()
+        ELSE NULL
+      END
+    WHERE ai_game_id = #{aiGameId}
+  </update>
+</mapper>

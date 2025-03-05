@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+  <link th:href="@{/css/layout.css}" rel="stylesheet">
+  <link th:href="@{/css/board.css}" rel="stylesheet">
+</th:block>
+
+<th:block layout:fragment="script">
+  <script th:src="@{/js/board.js}"></script>
+</th:block>
+
+<div layout:fragment="content">
+  <!-- 헤더 -->
+  <div th:replace="~{fragments/header :: header}"></div>
+
+  <!-- 게시판 내용 -->
+  <div class="board-container">
+    <div class="board-sidebar">
+      <div class="sidebar-header">
+        <h3>게시판 목록</h3>
+      </div>
+      <div class="sidebar-menu">
+        <a th:href="@{/board/notice}" 
+           th:class="${boardType == T(BoardGame.constant.BoardType).NOTICE ? 'active' : ''}">
+           공지사항
+        </a>
+        <a th:href="@{/board/strategy}" 
+           th:class="${boardType == T(BoardGame.constant.BoardType).STRATEGY ? 'active' : ''}">
+           공략 게시판
+        </a>
+        <a th:href="@{/board/free}" 
+           th:class="${boardType == T(BoardGame.constant.BoardType).FREE ? 'active' : ''}">
+           자유 게시판
+        </a>
+      </div>
+    </div>
+
+    <div class="board-content">
+      <div class="post-header">
+        <h1 class="post-title" th:text="${post.title}">제목</h1>
+        <div class="post-info">
+          <span th:text="${post.writer}">작성자</span>
+          <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
+          <span th:text="|조회수 ${post.viewCount}|">조회수</span>
+        </div>
+      </div>
+
+      <div class="post-content" th:text="${post.content}">
+        내용
+      </div>
+
+      <div class="post-actions">
+        <button class="post-btn back-btn">목록</button>
+        <th:block th:if="${member != null && (member.role == T(BoardGame.constant.Role).ADMIN || member.nickname == post.writer)}">
+          <button class="post-btn edit-btn">수정</button>
+          <button class="post-btn delete-btn">삭제</button>
+        </th:block>
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+</html>

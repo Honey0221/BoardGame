@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+  <link th:href="@{/css/game.css}" rel="stylesheet">
+</th:block>
+
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+    const gameInfo = /*[[${gameInfo}]]*/ null;
+    let validMoves = /*[[${validMoves}]]*/ [];
+    const board = /*[[${board}]]*/ [];
+    const moves = /*[[${moves}]]*/ [];
+    const timeLimit = 30;
+  </script>
+  <script th:src="@{/js/game/game-core.js}"></script>
+  <script th:src="@{/js/game/game-board.js}"></script>
+  <script th:src="@{/js/game/game-timer.js}"></script>
+  <script th:src="@{/js/game/game-chat.js}"></script>
+  <script th:src="@{/js/game/game-controls.js}"></script>
+  <script th:src="@{/js/game/game-result.js}"></script>
+  <!-- <script th:src="@{/js/game.js}"></script> -->
+</th:block>
+
+<div layout:fragment="content">
+  <div class="game-container">
+    <div class="game-info">
+      <div class="score-board">
+        <div class="player-score">
+          <div class="score-piece black"></div>
+          <div class="score-text">
+            <span th:text="${gameInfo.player1Nickname}">플레이어 1</span>
+            <span class="score" th:text="${gameInfo.player1Score}">2</span>
+          </div>
+        </div>
+        <div class="turn-indicator-container">
+          <div class="turn-indicator"
+               th:classappend="${gameInfo.isPlayer1Turn ? 'player1-turn' : 'player2-turn'}">
+            <div class="turn-text">
+              <span th:text="${gameInfo.isPlayer1Turn ? gameInfo.player1Nickname + '님의 턴' : gameInfo.player2Nickname + '님의 턴'}">플레이어1 턴</span>
+            </div>
+            <div class="timer-display">
+              <span class="timer">30</span>초
+            </div>
+          </div>
+        </div>
+        <div class="player-score">
+          <div class="score-text">
+            <span th:text="${gameInfo.player2Nickname}">플레이어 2</span>
+            <span class="score" th:text="${gameInfo.player2Score}">2</span>
+          </div>
+          <div class="score-piece white"></div>
+        </div>
+      </div>
+      <div class="game-controls">
+        <button class="surrender-btn">기권</button>
+      </div>
+    </div>
+
+    <div class="game-main">
+      <div class="board-container">
+        <div class="game-board">
+          <div class="board-row" th:each="row, rowStat : ${board}">
+            <div class="board-cell" th:each="cell, colStat : ${row}"
+              th:data-row="${rowStat.index}" th:data-col="${colStat.index}">
+              <div class="piece"
+                   th:classappend="${cell == 1 ? 'black' : (cell == 2 ? 'white' : '')}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="quick-chat">
+          <button class="quick-chat-btn" data-message="안녕하세요!">안녕하세요!</button>
+          <button class="quick-chat-btn" data-message="좋은 수였습니다.">좋은 수였습니다.</button>
+          <button class="quick-chat-btn" data-message="잠시만 기다려주세요.">잠시만 기다려주세요.</button>
+          <button class="quick-chat-btn" data-message="좋은 게임이었습니다.">좋은 게임이었습니다.</button>
+        </div>
+        <div class="chat-input">
+          <input type="text" id="messageInput" placeholder="메시지를 입력하세요...">
+          <button id="sendMessage">전송</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</html>

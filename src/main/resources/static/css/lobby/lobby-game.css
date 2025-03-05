@@ -1,0 +1,177 @@
+.matching-btn {
+  background: var(--gradient-primary);
+}
+
+.match-status {
+  background: var(--gradient-primary);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  margin-top: 15px;
+  text-align: center;
+  color: white;
+}
+
+.swal2-title {
+  margin: 0 0 1em !important;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 15px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+}
+
+.matching-info {
+  color: #fff;
+}
+
+.matching-info p {
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.match-result {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.opponent-info {
+  margin-bottom: 15px;
+}
+
+.opponent-info p {
+  margin: 8px 0;
+}
+
+.game-info {
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.game-info p {
+  margin-top: 0;
+  font-weight: bold;
+}
+
+.streak-badge {
+  background: linear-gradient(45deg, #ff4e50, #ff9e43);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: bold;
+  display: inline-block;
+  margin: 4px 0;
+}
+
+.ai-btn {
+  background: var(--gradient-secondary);
+}
+
+.turn-selection-modal {
+  background: linear-gradient(135deg, #1a1f3c 0%, #2a1b4d 100%) !important;
+  padding: 2rem !important;
+  max-width: 600px !important;
+}
+
+.turn-selection {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.turn-selection-title {
+  color: white !important;
+}
+
+.turn-selection-close-button {
+  position: absolute !important;
+  right: 12px !important;
+  top: 12px !important;
+  width: 24px !important;
+  height: 24px !important;
+  color: #666 !important;
+  font-size: 24px !important;
+  transition: color 0.2s ease !important;
+}
+
+.turn-selection-close-button:hover {
+  color: #333!important;
+}
+
+.swal2-close:focus {
+  box-shadow: none !important;
+}
+
+.turn-cards {
+  display: flex;
+  gap: 20px;
+  perspective: 1000px;
+}
+
+.turn-card {
+  position: relative;
+  width: 120px;
+  height: 160px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+}
+
+.turn-card:hover {
+  transform: scale(1.05);
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-front {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+}
+
+.card-back {
+  background: linear-gradient(135deg, var(--success-color), #45a049);
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.turn-card:hover .card-front {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.turn-card.selected .card-inner {
+  transform: rotateY(180deg);
+}
+
+.turn-card.not-selected {
+  opacity: 0.3;
+  transition: opacity 0.8s;
+}

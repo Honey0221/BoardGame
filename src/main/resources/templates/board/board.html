@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+  <link th:href="@{/css/layout.css}" rel="stylesheet">
+  <link th:href="@{/css/board.css}" rel="stylesheet">
+</th:block>
+
+<th:block layout:fragment="script">
+  <script th:src="@{/js/board.js}"></script>
+</th:block>
+
+<div layout:fragment="content">
+  <!-- 헤더 -->
+  <div th:replace="~{fragments/header :: header}"></div>
+
+  <div class="board-container">
+    <!-- 사이드바 -->
+    <div class="board-sidebar">
+      <div class="sidebar-header">
+        <h3>게시판 목록</h3>
+      </div>
+      <div class="sidebar-menu">
+        <a th:href="@{/board/notice}"
+           th:class="${boardType == T(BoardGame.constant.BoardType).NOTICE} ? 'active' : ''">
+           공지사항
+        </a>
+        <a th:href="@{/board/strategy}"
+           th:class="${boardType == T(BoardGame.constant.BoardType).STRATEGY} ? 'active' : ''">
+           공략 게시판
+        </a>
+        <a th:href="@{/board/free}"
+           th:class="${boardType == T(BoardGame.constant.BoardType).FREE} ? 'active' : ''">
+           자유 게시판
+        </a>
+      </div>
+    </div>
+  
+    <!-- 게시판 내용 -->
+    <div class="board-content">
+      <div class="board-header">
+        <h2 th:text="${boardType.getDisplayText()}">게시판</h2>
+        <button th:if="${boardType.name() == 'NOTICE' && member != null && member.role == T(BoardGame.constant.Role).ADMIN}"
+                class="write-btn"
+                th:onclick="|location.href='@{/board/notice/write}'|">작성</button>
+        <button th:if="${boardType.name() != 'NOTICE' && member != null}" 
+                class="write-btn"
+                th:onclick="|location.href='@{/board/{type}/write(type=${boardType.name().toLowerCase()})}'|">작성</button>
+      </div>
+
+      <table class="board-table">
+        <thead>
+          <tr>
+            <th style="width: 10%">번호</th>
+            <th style="width: 50%">제목</th>
+            <th style="width: 15%">작성자</th>
+            <th style="width: 15%">작성일</th>
+            <th style="width: 10%">조회수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="post, status : ${posts}">
+            <td th:text="${startNumber - status.index}">1</td>
+            <td>
+              <a th:href="@{/board/{type}/{postId}(type=${boardType.name().toLowerCase()}, postId=${post.postId})}" 
+                 class="board-title" 
+                 th:text="${post.title}">제목</a>
+            </td>
+            <td th:text="${post.writer}">작성자</td>
+            <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">2024-01-01</td>
+            <td th:text="${post.viewCount}">0</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination" th:if="${totalPages > 0}">
+        <a th:if="${currentPage > 1}"
+           th:href="@{/board/{type}(type=${boardType.name().toLowerCase()}, page=${currentPage - 1})}"
+           class="page-link">&lt;</a>
+        <th:block th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+          <a th:href="@{/board/{type}(type=${boardType.name().toLowerCase()}, page=${pageNum})}"
+             th:text="${pageNum}"
+             th:class="${pageNum == currentPage} ? 'page-link active' : 'page-link'"></a>
+        </th:block>
+        <a th:if="${currentPage < totalPages}"
+           th:href="@{/board/{type}(type=${boardType.name().toLowerCase()}, page=${currentPage + 1})}"
+           class="page-link">&gt;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</div>

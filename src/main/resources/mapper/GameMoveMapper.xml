@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardGame.mapper.GameMoveMapper">
+  <!-- 새로운 수 기록 -->
+  <insert id="insertMove" parameterType="BoardGame.domain.GameMove" useGeneratedKeys="true" keyProperty="moveId">
+    INSERT INTO game_move (
+      game_id,
+      player_id,
+      row_pos,
+      col_pos,
+      move_number
+    ) VALUES (
+      #{gameId},
+      #{playerId},
+      #{rowPos},
+      #{colPos},
+      #{moveNumber}
+    )
+  </insert>
+
+  <!-- 특정 게임의 모든 수 조회 -->
+  <select id="selectMovesByGameId" resultType="BoardGame.domain.GameMove">
+    SELECT
+      move_id as moveId,
+      game_id as gameId,
+      player_id as playerId,
+      row_pos as rowPos,
+      col_pos as colPos,
+      move_number as moveNumber
+    FROM game_move
+    WHERE game_id = #{gameId}
+    ORDER BY move_number
+  </select>
+
+  <!-- 특정 게임의 특정 번호 수 조회 -->
+  <select id="selectMoveByNumber" resultType="BoardGame.domain.GameMove">
+    SELECT
+      move_id as moveId,
+      game_id as gameId,
+      player_id as playerId,
+      row_pos as rowPos,
+      col_pos as colPos,
+      move_number as moveNumber
+    FROM game_move
+    WHERE game_id = #{gameId}
+    AND move_number = #{moveNumber}
+  </select>
+
+  <!-- 특정 게임의 마지막 수 조회 -->
+  <select id="selectLastMoveNumber" parameterType="long" resultType="int">
+    SELECT COALESCE(MAX(move_number), 0)
+    FROM game_move
+    WHERE game_id = #{gameId}
+  </select>
+
+</mapper>

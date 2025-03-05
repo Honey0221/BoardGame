@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+  <link th:href="@{/css/ai-game.css}" rel="stylesheet">
+</th:block>
+
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    const gameInfo = /*[[${gameInfo}]]*/ null;
+    let validMoves = /*[[${validMoves}]]*/[];
+    const board = /*[[${board}]]*/[];
+    const moves = /*[[${moves}]]*/[];
+    /*]]>*/
+  </script>
+  <script th:src="@{/js/ai-game.js}"></script>
+</th:block>
+
+<div layout:fragment="content">
+  <div id="startGameModal" class="modal">
+    <div class="modal-content">
+      <h2>오셀로 게임</h2>
+      <button id="startGameBtn" class="start-btn">게임 시작</button>
+    </div>
+  </div>
+  <div class="game-container">
+    <div class="game-info">
+      <div class="score-board">
+        <div class="player-score">
+          <div class="score-piece black"></div>
+          <div class="score-text">
+            <span>플레이어</span>
+            <span class="score" th:text="${gameInfo.playerScore}">2</span>
+          </div>
+        </div>
+        <div class="turn-indicator" th:classappend="${gameInfo.isPlayerTurn ? 'player-turn' : 'ai-turn'}">
+          <span th:text="${gameInfo.isPlayerTurn ? '플레이어 턴' : 'AI 턴'}">플레이어 턴</span>
+        </div>
+        <div class="ai-score">
+          <div class="score-text">
+            <span>AI</span>
+            <span class="score" th:text="${gameInfo.aiScore}">2</span>
+          </div>
+          <div class="score-piece white"></div>
+        </div>
+      </div>
+      <div class="game-controls">
+        <button class="leave-btn">나가기</button>
+      </div>
+    </div>
+
+    <div class="board-container">
+      <div class="game-board">
+        <div class="board-row" th:each="row, rowStat : ${board}">
+          <div class="board-cell" th:each="cell, colStat : ${row}"
+            th:data-row="${rowStat.index}"
+            th:data-col="${colStat.index}">
+            <div class="piece" th:classappend="${cell == 1 ? 'black' : (cell == 2 ? 'white' : '')}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

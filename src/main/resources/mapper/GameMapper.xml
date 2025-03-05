@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardGame.mapper.GameMapper">
+  <!-- 게임 ID로 조회 -->
+  <select id="selectGameById" parameterType="Long" resultType="BoardGame.domain.Game">
+    SELECT *
+    FROM game
+    WHERE game_id = #{gameId}
+  </select>
+
+  <!-- 새로운 게임 생성 -->
+  <insert id="insertGame" parameterType="BoardGame.domain.Game" useGeneratedKeys="true" keyProperty="gameId">
+    INSERT INTO game (
+      player1_id,
+      player2_id,
+      status,
+      started_at,
+      player1_score,
+      player2_score,
+      is_player1_turn
+    ) VALUES (
+      #{player1Id},
+      #{player2Id},
+      #{status},
+      #{startedAt},
+      #{player1Score},
+      #{player2Score},
+      #{isPlayer1Turn}
+    )
+  </insert>
+
+  <!-- 게임 정보와 플레이어 정보 조회 -->
+  <select id="selectGameWithPlayers" resultType="map">
+    SELECT
+      g.game_id as gameId,
+      g.player1_id as player1Id,
+      g.player2_id as player2Id,
+      g.status,
+      g.started_at as startedAt,
+      g.ended_at as endedAt,
+      g.player1_score as player1Score,
+      g.player2_score as player2Score,
+      g.is_player1_turn as isPlayer1Turn,
+      m1.member_id as player1MemberId,
+      m1.nickname as player1Nickname,
+      m1.rating_point as player1Rating,
+      m2.member_id as player2MemberId,
+      m2.nickname as player2Nickname,
+      m2.rating_point as player2Rating,
+      CASE 
+        WHEN g.is_player1_turn = true THEN m1.member_id
+        ELSE m2.member_id
+      END as currentPlayerMemberId
+    FROM game g
+    JOIN member m1 ON g.player1_id = m1.id
+    JOIN member m2 ON g.player2_id = m2.id
+    WHERE g.game_id = #{gameId}
+  </select>
+
+  <!-- 게임 정보 업데이트 -->
+  <update id="updateGame" parameterType="BoardGame.domain.Game">
+    UPDATE game
+    SET status = #{status},
+        ended_at = #{endedAt},
+        player1_score = #{player1Score},
+        player2_score = #{player2Score},
+        is_player1_turn = #{isPlayer1Turn}
+    WHERE game_id = #{gameId}
+  </update>
+</mapper>

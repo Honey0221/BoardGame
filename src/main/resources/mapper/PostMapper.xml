@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardGame.mapper.PostMapper">
+  <select id="selectByPage" resultType="Post">
+    SELECT *
+    FROM post
+    WHERE board_type = #{boardType}
+    ORDER BY created_at DESC
+    LIMIT #{size} OFFSET #{offset}
+  </select>
+
+  <select id="countByBoardType" resultType="int">
+    SELECT COUNT(*)
+    FROM post
+    WHERE board_type = #{boardType}
+  </select>
+
+  <select id="selectRecent" resultType="Post">
+    SELECT
+      post_id as postId,
+      title,
+      content,
+      writer,
+      board_type as boardType,
+      view_count as viewCount,
+      created_at as createdAt
+    FROM post
+    WHERE board_type = #{boardType}
+    ORDER BY created_at DESC
+    LIMIT 5
+  </select>
+
+  <select id="selectById" resultType="Post">
+    SELECT *
+    FROM post
+    WHERE post_id = #{postId}
+  </select>
+
+  <insert id="insertPost" parameterType="Post">
+    INSERT INTO post (
+    title, content, writer, board_type,
+    view_count, created_at
+    ) VALUES (
+    #{title}, #{content}, #{writer}, #{boardType},
+    0, NOW()
+    )
+  </insert>
+
+  <update id="updatePost" parameterType="Post">
+    UPDATE post
+    SET title = #{title},
+    content = #{content}
+    WHERE post_id = #{postId}
+  </update>
+
+  <delete id="deletePost">
+    DELETE FROM post
+    WHERE post_id = #{postId}
+  </delete>
+
+  <update id="incrementViewCount">
+    UPDATE post
+    SET view_count = view_count + 1
+    WHERE post_id = #{postId}
+  </update>
+</mapper>

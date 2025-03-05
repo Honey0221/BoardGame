@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardGame.mapper.MemberMapper">
+  <!-- 기본키(id)로 회원 조회 -->
+  <select id="selectById" parameterType="Long" resultType="BoardGame.domain.Member">
+    SELECT *
+    FROM member
+    WHERE id = #{id}
+  </select>
+
+  <!-- 회원 아이디로 회원 조회 -->
+  <select id="selectByMemberId" parameterType="String" resultType="BoardGame.domain.Member">
+    SELECT *
+    FROM member
+    WHERE member_id = #{memberId}
+  </select>
+
+  <!-- 닉네임으로 회원 조회 -->
+  <select id="selectByNickname" parameterType="String" resultType="BoardGame.domain.Member">
+    SELECT *
+    FROM member
+    WHERE nickname = #{nickname}
+  </select>
+
+  <!-- 휴대폰 번호로 회원 조회 (아이디 찾기) -->
+  <select id="findMemberByPhone" parameterType="String" resultType="BoardGame.domain.Member">
+    SELECT * FROM member
+    WHERE phone = #{phone}
+    AND status = 'OFFLINE'
+  </select>
+
+  <!-- 아이디와 휴대폰 번호로 회원 조회 (비밀번호 찾기) -->
+  <select id="findMemberByIdAndPhone" parameterType="String" resultType="BoardGame.domain.Member">
+    SELECT * FROM member
+    WHERE member_id = #{memberId}
+    AND phone = #{phone}
+    AND status = 'OFFLINE'
+  </select>
+
+  <!-- 비밀번호 업데이트 -->
+  <update id="updatePassword">
+    UPDATE member
+    SET password = #{password},
+        updated_at = NOW()
+    WHERE id = #{id}
+  </update>
+
+  <!-- 회원 등록 -->
+  <insert id="insertMember" parameterType="BoardGame.domain.Member" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO member (
+      member_id,
+      nickname,
+      password,
+      phone,
+      role,
+      status
+    ) VALUES (
+      #{memberId},
+      #{nickname},
+      #{password},
+      #{phone},
+      #{role},
+      #{status}
+    )
+  </insert>
+
+  <!-- 회원 정보 업데이트 -->
+  <update id="updateMember" parameterType="BoardGame.domain.Member">
+    UPDATE member
+    SET
+      rating_point = #{ratingPoint},
+      tier = #{tier},
+      total_games = #{totalGames},
+      wins = #{wins},
+      losses = #{losses},
+      win_streak = #{winStreak},
+      max_win_streak = #{maxWinStreak},
+      updated_at = NOW()
+    WHERE id = #{id}
+  </update>
+
+  <!-- 사용자 상태 업데이트 -->
+  <update id="updateStatus">
+    UPDATE member
+    SET status = #{status}
+    WHERE member_id = #{memberId}
+  </update>
+
+  <!-- 온라인 접속자 조회 -->
+  <select id="selectAllOnlineUsers" resultType="BoardGame.domain.Member">
+    SELECT *
+    FROM member
+    WHERE status IN ('ONLINE', 'MATCHING', 'IN_GAME')
+  </select>
+
+  <!-- 매칭중 사용자 조회 -->
+  <select id="selectMatchingUsers" resultType="BoardGame.domain.Member">
+    SELECT *
+    FROM member
+    WHERE status = 'MATCHING'
+    ORDER BY rating_point ASC
+  </select>
+
+  <!-- 상위 5명 점수 랭킹 조회 -->
+  <select id="selectTop5ByRatingPoint" resultType="BoardGame.domain.Member">
+    SELECT 
+      id,
+      nickname,
+      tier,
+      rating_point as ratingPoint,
+      wins,
+      total_games as totalGames
+    FROM member
+    WHERE role = 'USER'
+    ORDER BY rating_point DESC
+    LIMIT 5
+  </select>
+
+  <!-- 상위 5명 승률 랭킹 조회 -->
+  <select id="selectTop5ByWinRate" resultType="BoardGame.domain.Member">
+    SELECT 
+      id,
+      nickname,
+      tier,
+      rating_point as ratingPoint,
+      wins,
+      total_games as totalGames,
+      ROUND(wins * 100.0 / total_games, 1) as winRate
+    FROM member
+    WHERE role = 'USER'
+      AND total_games >= 10
+    ORDER BY (wins * 100.0 / total_games) DESC, totalGames DESC
+    LIMIT 5
+  </select>
+</mapper>

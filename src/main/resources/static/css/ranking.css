@@ -1,0 +1,122 @@
+.ranking-modal {
+  width: 600px !important;
+  padding: 20px 0 !important;
+}
+
+.ranking-modal .swal-actions {
+  margin: 0 !important;
+}
+
+.ranking-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--primary-color);
+}
+
+.ranking-tab {
+  font-size: 1rem;
+  flex: 1;
+  padding: 15px;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.ranking-tab.active {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.ranking-content {
+  padding: 20px;
+}
+
+.ranking-panel {
+  display: none;
+}
+
+.ranking-panel.active {
+  display: block;
+}
+
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.ranking-card {
+  display: flex;
+  align-items: center;
+  background: var(--gradient-primary);
+  padding: 15px;
+  border-radius: var(--border-radius);
+  transition: transform var(--transition-speed);
+}
+
+.rank-1 {
+  transform: scale(1.1);
+  border: 2px solid gold;
+  box-shadow: var(--hover-shadow);
+}
+
+.rank-2 {
+  transform: scale(1.05);
+  border: 2px solid silver;
+  box-shadow: var(--hover-shadow);
+}
+
+.rank-3 {
+  border: 2px solid #cd7f32;
+  box-shadow: var(--hover-shadow);
+}
+
+.rank-4 {
+  transform: scale(0.95);
+  box-shadow: var(--hover-shadow);
+}
+
+.rank-5 {
+  transform: scale(0.9);
+  box-shadow: var(--hover-shadow);
+}
+
+.ranking-medal {
+  color: white;
+  font-size: 1.5em;
+  margin-right: 15px;
+  min-width: 40px;
+  text-align: center;
+}
+
+.ranking-info {
+  flex: 1;
+}
+
+.ranking-nickname {
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 5px;
+}
+
+.ranking-tier {
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 3px;
+}
+
+.ranking-rating {
+  font-weight: bold;
+  color: #ff9800;
+}
+
+.ranking-winrate {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.ranking-games {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 3px;
+}

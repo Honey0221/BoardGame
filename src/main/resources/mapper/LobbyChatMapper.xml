@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardGame.mapper.LobbyChatMapper">
+  <!-- 새로운 채팅 메시지 저장 -->
+  <insert id="insertChat" parameterType="BoardGame.domain.LobbyChat">
+    INSERT INTO lobby_chat (
+      sender_id,
+      sender_nickname,
+      message,
+      type,
+      sent_at
+    ) VALUES (
+      #{senderId},
+      #{senderNickname},
+      #{message},
+      #{type},
+      #{sentAt}
+    )
+  </insert>
+
+  <!-- 최근 채팅 내역 조회 -->
+  <select id="selectRecentChats" resultType="BoardGame.domain.LobbyChat">
+    SELECT *
+    FROM lobby_chat
+    ORDER BY sent_at ASC
+    LIMIT #{limit}
+  </select>
+</mapper>

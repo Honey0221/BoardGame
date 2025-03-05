@@ -1,0 +1,221 @@
+:root {
+  --primary-color: #1161ED;
+  --secondary-color: #2196F3;
+  --error-color: #F44336;
+  --success-color: #4CAF50;
+  --warning-color: #FF9800;
+  --text-primary: #333;
+  --text-secondary: #666;
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+  --gradient-primary: linear-gradient(135deg, #1a1f3c, #2a1b4d);
+  --gradient-secondary: linear-gradient(45deg, #ff4e50, #ff9e43);
+  --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --hover-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 공통 모달창 디자인 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  max-width: 525px;
+  margin: 8% auto;
+  padding: 3rem;
+  background-image: url('https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09');
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 50px 70px -20px rgba(0, 0, 0, 0.85);
+  border-radius: 15px;
+}
+
+.modal-content::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: radial-gradient(ellipse at left bottom, rgba(22, 24, 47, 1) 0%, rgba(38, 20, 72, .9) 59%, rgba(17, 27, 75, .9) 100%);
+  box-shadow: 0 -20px 150px -20px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+}
+
+.modal-content h2 {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.modal .close {
+  position: absolute;
+  right: 2rem;
+  top: 2rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.modal .close:hover {
+  color: #fff;
+}
+
+.modal form {
+  position: relative;
+  z-index: 1;
+}
+
+/* 공통 애니메이션 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-60px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flip {
+  0% { 
+    transform: translate(-50%, -50%) rotateY(0deg); 
+    z-index: 1;
+  }
+  25% { 
+    transform: translate(-50%, -50%) rotateY(45deg) scale(1.05);
+    z-index: 1; 
+  }
+  50% { 
+    transform: translate(-50%, -50%) rotateY(90deg) scale(1.1);
+    z-index: 0;
+  }
+  75% { 
+    transform: translate(-50%, -50%) rotateY(135deg) scale(1.05);
+    z-index: 0; 
+  }
+  100% { 
+    transform: translate(-50%, -50%) rotateY(180deg);
+    z-index: 1; 
+  }
+}
+
+@keyframes place {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5) translateY(-20px);
+    opacity: 0.5;
+  }
+  70% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+  50% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@-webkit-keyframes shine {
+  0% { opacity: 1; }
+  40% { opacity: 1; }
+  100% { left: 125%; opacity: 0; }
+}
+
+@keyframes shine {
+  0% { opacity: 1; }
+  40% { opacity: 1; }
+  100% { left: 125%; opacity: 0; }
+}
+
+@keyframes shine-black {
+  0% { 
+    transform: rotate(30deg) translateX(-30%);
+    opacity: 0;
+  }
+  15% { 
+    transform: rotate(30deg) translateX(-30%);
+    opacity: 0;
+  }
+  35% { 
+    opacity: 0.1;
+  }
+  40% { 
+    transform: rotate(30deg) translateX(20%);
+    opacity: 0.2;
+  }
+  100% { 
+    transform: rotate(30deg) translateX(20%);
+    opacity: 0;
+  }
+}
+
+@keyframes shine-white {
+  0% { 
+    transform: rotate(30deg) translateX(-30%);
+    opacity: 0;
+  }
+  35% { 
+    transform: rotate(30deg) translateX(-30%);
+    opacity: 0;
+  }
+  55% { 
+    opacity: 0.1;
+  }
+  60% { 
+    transform: rotate(30deg) translateX(20%);
+    opacity: 0.3;
+  }
+  100% { 
+    transform: rotate(30deg) translateX(20%);
+    opacity: 0;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+@keyframes scale {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.05); }
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 90%;
+    max-width: 380px;
+    margin: 20% auto;
+  }
+}

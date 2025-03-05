@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}">
+
+<th:block layout:fragment="css">
+  <link th:href="@{/css/layout.css}" rel="stylesheet">
+  <link th:href="@{/css/lobby/lobby.css}" rel="stylesheet">
+  <link th:href="@{/css/lobby/lobby-game.css}" rel="stylesheet">
+</th:block>
+
+<th:block layout:fragment="script">
+  <script th:src="@{/js/lobby/lobby-ai.js}"></script>
+  <script th:src="@{/js/lobby/lobby-match.js}"></script>
+  <script th:src="@{/js/lobby/lobby-board.js}"></script>
+  <script th:src="@{/js/lobby/lobby.js}"></script>
+</th:block>
+
+<div layout:fragment="content">
+  <!-- 헤더 -->
+  <div th:replace="~{fragments/header :: header}"></div>
+  
+  <!-- 배너 섹션 -->
+  <div class="banner-section">
+    <div class="swiper banner-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <a href="#" class="banner-link">
+            <img th:src="@{/images/banner1.png}" alt="배너 이미지 1">
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" class="banner-link">
+            <img th:src="@{/images/banner2.png}" alt="배너 이미지 2">
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" class="banner-link">
+            <img th:src="@{/images/banner3.png}" alt="배너 이미지 3">
+          </a>
+        </div>
+        <div class="swiper-slide">
+          <a href="#" class="banner-link">
+            <img th:src="@{/images/banner4.png}" alt="배너 이미지 4">
+          </a>
+        </div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+
+  <div class="lobby-container">
+    <div class="left-content">
+      <!-- 프로필 섹션 -->
+      <div class="profile-section">
+        <input type="hidden" id="memberId" th:value="${member.id}">
+        <input type="hidden" id="memberNickname" th:value="${member.nickname}">
+        <div class="profile-card">
+          <div class="profile-info">
+            <div class="profile-details">
+              <h2 th:text="${member.nickname}">닉네임</h2>
+            </div>
+          </div>
+          <div class="profile-stats">
+            <div class="stat-item">
+              <span class="stat-label">승률</span>
+              <span class="stat-value">
+                <span th:text="${member.totalGames > 0 ? #numbers.formatDecimal(member.wins * 100.0 / member.totalGames, 1, 1) : '0.0'}">0.0</span>%
+              </span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">티어</span>
+              <span class="stat-value">
+                <span th:text="${member.tier}"></span>
+              </span>
+            </div>
+          </div>
+          <button class="logout-btn">로그아웃</button>
+        </div>
+      </div>
+
+      <!-- 게임 매칭 섹션 -->
+      <div class="game-section">
+        <div class="main-buttons">
+          <button class="game-btn matching-btn">
+            <span class="btn-icon">🎮</span>
+            <span class="btn-text">매칭 시작</span>
+          </button>
+          <button class="game-btn ai-btn">
+            <span class="btn-icon">🤖</span>
+            <span class="btn-text">AI 대전</span>
+          </button>
+        </div>
+        <div id="matchStatus" class="match-status" style="display: none;">
+          <div class="loading-spinner"></div>
+          <div class="matching-info">
+            <p>매칭 중...</p>
+            <p>현재 연승: <span>0</span>연승</p>
+            <p class="elapsed-time">소요 시간: 0:00</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 접속자 목록 -->
+      <div class="online-users-section">
+        <h3>접속자 목록 (<span id="userCount" th:text="${userCount}">0</span>명)</h3>
+        <div class="online-user-list">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th class="user-nickname">닉네임</th>
+                <th class="user-status">상태</th>
+              </tr>
+            </thead>
+            <tbody id="userList">
+              <tr class="user-item" th:each="user : ${onlineUsers}">
+                <td th:text="${user.nickname}"></td>
+                <td th:text="${user.status.getDisplayText()}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 게시판 섹션 -->
+    <div class="board-content">
+      <div class="board-header">
+        <div class="board-tabs">
+          <button class="tab-btn active" data-tab="notice">공지사항</button>
+          <button class="tab-btn" data-tab="strategy">공략 게시판</button>
+          <button class="tab-btn" data-tab="free">자유 게시판</button>
+        </div>
+        <a href="/board/notice" class="more-link">더보기 ></a>
+      </div>
+      <div class="board-panels">
+        <div class="board-panel active" id="notice-panel">
+          <div class="board-list">
+            <div class="board-item" th:each="notice : ${recentNotices}">
+              <span th:text="${'Debug: postId=' + notice.postId}" style="display: none;"></span>
+              <a th:href="@{/board/notice/{postId}(postId=${notice.postId})}"
+                 class="board-title" th:text="${notice.title}">제목</a>
+              <span class="board-date" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}">작성일</span>
+            </div>
+          </div>
+        </div>
+        <div class="board-panel" id="strategy-panel">
+          <div class="board-list">
+            <div class="board-item" th:each="strategy : ${recentStrategies}">
+              <a th:href="@{/board/strategy/{postId}(postId=${strategy.postId})}"
+                 class="board-title" th:text="${strategy.title}">제목</a>
+              <span class="board-date" th:text="${#temporals.format(strategy.createdAt, 'yyyy-MM-dd')}">작성일</span>
+            </div>
+          </div>
+        </div>
+        <div class="board-panel" id="free-panel">
+          <div class="board-list">
+            <div class="board-item" th:each="free : ${recentFrees}">
+              <a th:href="@{/board/free/{postId}(postId=${free.postId})}"
+                 class="board-title" th:text="${free.title}">제목</a>
+              <span class="board-date" th:text="${#temporals.format(free.createdAt, 'yyyy-MM-dd')}">작성일</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 채팅 섹션 -->
+    <div class="right-content">
+      <div class="notch">
+        <div class="notch-container">
+          <div class="notch-camera"></div>
+          <div class="notch-speaker"></div>
+        </div>
+        <div class="notch-time" id="currentTime"></div>
+        <div class="notch-icons">
+          <span class="signal">📶</span>
+          <span class="wifi">📡</span>
+          <span class="battery">🔋</span>
+        </div>
+      </div>
+
+      <div class="chat-container">
+        <div class="chat-header">
+          <div class="chat-title">
+            <h3>채팅</h3>
+          </div>
+          <div class="header-menu">⋯</div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+          <!-- 메시지 동적으로 추가 -->
+        </div>
+        <div class="chat-input-container">
+          <input type="text" class="chat-input" id="chatInput"
+                 placeholder="메시지 입력" maxlength="100">
+          <button class="send-btn" id="sendMessage">전송</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 푸터 -->
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+
+</html>
