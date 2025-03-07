@@ -85,7 +85,7 @@ public class GameMoveService {
 		}
 
 		GameMove move = othelloGame.createGameMove(row, col, player.getId(),
-				false, moves.size() + 1);
+				moves.size() + 1);
 		gameMoveMapper.insertMove(move);
 
 		int nextPlayer = (currentPlayer == 1) ? 2 : 1;
@@ -146,8 +146,7 @@ public class GameMoveService {
 		}
 
 		GameMove move = othelloGame.createGameMove(randomMove.getRow(),
-				randomMove.getCol(), currentPlayer.getId(),
-				true, moves.size() + 1);
+				randomMove.getCol(), currentPlayer.getId(), moves.size() + 1);
 		gameMoveMapper.insertMove(move);
 
 		gameStateService.updateGameState(game, othelloGame);

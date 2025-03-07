@@ -34,13 +34,11 @@ public class OthelloGame {
 				board[i][j] = 0;
 			}
 		}
-
 		int center = BOARD_SIZE / 2;
 		board[center - 1][center - 1] = 2;
 		board[center - 1][center] = 1;
 		board[center][center - 1] = 1;
 		board[center][center] = 2;
-
 		updateScore();
 	}
 
@@ -115,8 +113,7 @@ public class OthelloGame {
 		}
 	}
 
-	public GameMove createGameMove(int row, int col, Long playerId,
-			boolean isAIMove, int moveNumber) {
+	public GameMove createGameMove(int row, int col, Long playerId, int moveNumber) {
 		GameMove move = new GameMove();
 		move.setGameId(this.gameId);
 		move.setPlayerId(playerId);

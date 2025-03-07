@@ -31,7 +31,8 @@ public class AIGameService {
 	private final MemberMapper memberMapper;
 	
 	@Transactional
-	public ResponseEntity<Map<String, Object>> createAIGame(Member player, TurnOrder order) {
+	public ResponseEntity<Map<String, Object>> createAIGame(
+			Member player, TurnOrder order) {
 		AIGame game = new AIGame();
 		game.setPlayerId(player.getId());
 		game.setStatus(GameStatus.IN_PROGRESS);

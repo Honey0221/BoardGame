@@ -14,7 +14,6 @@ $(document).ready(function() {
   setInterval(updateTime, 60000);
   initializeMatchButton();
   initializeAIGame();
-  initializeRanking();
   initializeLogout();
 });
 
@@ -37,6 +36,25 @@ function initializeBanner() {
   });
 
   return swiper;
+}
+
+function initializeBoardTabs() {
+  const $tabBtns = $('.tab-btn');
+  const $moreLink = $('.more-link');
+  
+  $moreLink.attr('href', '/board/notice');
+  
+  $tabBtns.on('click', function() {
+    const tab = $(this).data('tab');
+    
+    $tabBtns.removeClass('active');
+    $(this).addClass('active');
+    
+    $('.board-panel').removeClass('active');
+    $(`#${tab}-panel`).addClass('active');
+    
+    $moreLink.attr('href', `/board/${tab}`);
+  });
 }
 
 function updateTime() {
@@ -89,6 +107,11 @@ function initializePageEvents() {
       requestUserListUpdate();
     }
   });
+
+  $('.board-btn').on('click', function(e) {
+    e.preventDefault();
+    window.location.href = '/board/notice';
+  });
 }
 
 function requestUserListUpdate() {
@@ -129,12 +152,16 @@ function initializeChat() {
 function appendMessage(data) {
   if (!data || !data.message) return;
 
-  let messageClass = 'system-message';
+  let messageClass = '';
   let nicknameHtml = '';
 
   if (data.senderNickname) {
-    messageClass = data.senderNickname === memberNickname ? 'my-message' : 'other-message';
-    nicknameHtml = `<span class="message-nickname">${data.senderNickname}</span>`;
+    messageClass = data.senderNickname === memberNickname ?
+     'my-message' : 'other-message';
+    nicknameHtml = `
+      <span class="message-nickname">
+        ${data.senderNickname}
+      </span>`;
   }
 
   const messageDiv = $(`
